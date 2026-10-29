@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block title %}登录{% endblock %}
+{% block content %}
+<section class="auth-wrap"><div class="auth-art"><span class="eyebrow">SECOND LIFE, BETTER LIFE</span><h1>让好物<br>继续发挥价值。</h1><p>每一次闲置流转，都让生活多一点可能。</p><div class="art-shape"></div></div>
+<div class="form-card"><span class="eyebrow">WELCOME BACK</span><h2>欢迎回来</h2><p class="muted">登录后继续发现值得珍藏的好物。</p>
+<form method="post" class="stack-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label>用户名<input name="username" required minlength="3" maxlength="60" autocomplete="username" autofocus></label><label>密码<input name="password" type="password" required autocomplete="current-password"></label><button class="button button-primary button-wide">登录</button></form>
+<p class="form-switch">还没有账号？<a href="{{ url_for('auth.register') }}">立即注册</a></p></div></section>
+{% endblock %}

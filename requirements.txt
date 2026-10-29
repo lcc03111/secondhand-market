@@ -1,0 +1,7 @@
+Flask
+Flask-Login
+Flask-SQLAlchemy
+Flask-WTF
+python-dotenv
+PyMySQL
+gunicorn

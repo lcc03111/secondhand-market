@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}首页{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy"><span class="eyebrow">A SMALLER WASTE, A BETTER FIND</span><h1>{% if current_user.is_authenticated %}你好，{{ current_user.nickname }}<br>{% endif %}让闲置，遇见新生活。</h1><p>发现身边的二手好物，也让你不再需要的物品继续发挥价值。</p>
+  <form class="searchbar" method="get" action="{{ url_for('main.item_list') }}"><input name="q" placeholder="搜索你想找的物品"><button class="button button-primary">开始寻找</button></form>
+  </div><div class="hero-illustration" aria-hidden="true"><div class="sun"></div><div class="book">READ<br>AGAIN</div><div class="plant"><i></i><b></b><em></em></div><div class="vase"></div></div>
+</section>
+{% if announcements %}<section class="announcement-strip"><strong>平台公告</strong>{% for announcement in announcements %}<span>{{ announcement.title }} · {{ announcement.content }}</span>{% endfor %}</section>{% endif %}
+<section class="section-block"><div class="section-title"><div><span class="eyebrow">BROWSE BY CATEGORY</span><h2>逛逛分类</h2></div><a href="{{ url_for('main.item_list') }}">查看全部 →</a></div>
+<div class="category-row">{% for category in categories %}<a class="category-pill" href="{{ url_for('main.item_list', category=category.id) }}"><span class="category-dot"></span>{{ category.name }}</a>{% else %}<span class="muted">暂无分类</span>{% endfor %}</div></section>
+<section class="section-block"><div class="section-title"><div><span class="eyebrow">FRESHLY LISTED</span><h2>新近上架</h2></div><a href="{{ url_for('main.item_list') }}">更多好物 →</a></div>
+<div class="item-grid">{% for item in items %}<article class="item-card"><a href="{{ url_for('main.item_detail', item_id=item.id) }}" class="item-image">{% if item.images %}<img src="{{ url_for('main.uploaded_file', filename=item.images[0].filename) }}" alt="{{ item.title }}">{% else %}<span class="image-placeholder">拾物</span>{% endif %}</a><div class="item-card-body"><div class="item-meta"><span>{{ item.category.name }}</span><span>{{ item.condition_level }}</span></div><a class="item-title" href="{{ url_for('main.item_detail', item_id=item.id) }}">{{ item.title }}</a><div class="item-bottom"><strong>¥ {{ '%.2f'|format(item.price) }}</strong><span>{{ item.seller.nickname }}</span></div></div></article>{% else %}<div class="empty-state">还没有在售物品，欢迎成为第一个发布者。</div>{% endfor %}</div></section>
+{% endblock %}

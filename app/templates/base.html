@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}拾物{% endblock %} · 闲置物品交易流转平台</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="{{ url_for('main.home') }}"><span class="brand-mark">拾</span>拾物</a>
+  <nav class="nav-links">
+    <a href="{{ url_for('main.home') }}">首页</a><a href="{{ url_for('main.item_list') }}">逛物品</a>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('market.create_item') }}">发布闲置</a><a href="{{ url_for('orders.order_list') }}">我的订单</a>
+      <a href="{{ url_for('market.inbox') }}">消息</a><a href="{{ url_for('account.profile') }}">个人中心</a>
+      {% if current_user.account_role == 'admin' %}<a href="{{ url_for('admin.dashboard') }}">管理后台</a>{% endif %}
+    {% endif %}
+  </nav>
+  <div class="top-actions">
+    {% if current_user.is_authenticated %}
+      <a class="notification-link" href="{{ url_for('account.notifications') }}">通知{% if unread_count %}<b>{{ unread_count }}</b>{% endif %}</a>
+      <span class="user-chip">{{ current_user.nickname }}</span>
+      <form method="post" action="{{ url_for('auth.logout') }}" class="inline-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-small button-outline">退出</button></form>
+    {% else %}
+      <a class="button button-small button-outline" href="{{ url_for('auth.login') }}">登录</a>
+      <a class="button button-small button-primary" href="{{ url_for('auth.register') }}">注册</a>
+    {% endif %}
+  </div>
+</header>
+<main class="page-shell">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}<div class="flash-list">{% for category, message in messages %}<div class="flash flash-{{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<footer class="site-footer"><span>拾物 · 让闲置继续流转</span><span>二手物品交易流转平台</span></footer>
+</body>
+</html>

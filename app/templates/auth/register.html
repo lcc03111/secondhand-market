@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block title %}注册{% endblock %}
+{% block content %}
+<section class="auth-wrap"><div class="auth-art"><span class="eyebrow">GIVE GOOD THINGS ANOTHER GO</span><h1>一个账号，<br>买卖都自在。</h1><p>让暂时用不上的东西，找到下一位珍惜它的人。</p><div class="art-shape art-shape-alt"></div></div>
+<div class="form-card"><span class="eyebrow">JOIN THE COMMUNITY</span><h2>创建账号</h2><p class="muted">注册后即可浏览、购买或发布闲置。</p>
+<form method="post" class="stack-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label>昵称<input name="nickname" required maxlength="50" autocomplete="nickname"></label><label>用户名<input name="username" required minlength="3" maxlength="60" autocomplete="username"></label><label>密码<input name="password" type="password" required minlength="8" autocomplete="new-password"></label><label>确认密码<input name="confirm_password" type="password" required minlength="8" autocomplete="new-password"></label><button class="button button-primary button-wide">注册并继续</button></form>
+<p class="form-switch">已经有账号？<a href="{{ url_for('auth.login') }}">直接登录</a></p><p class="tiny-note">密码将以哈希形式保存，平台不保存明文密码。</p></div></section>
+{% endblock %}

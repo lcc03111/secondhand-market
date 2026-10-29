@@ -1,0 +1,1 @@
+{% extends "base.html" %}{% block title %}无权访问{% endblock %}{% block content %}<div class="empty-state error-state"><h1>403</h1><p>当前账号没有访问此页面的权限。</p><a class="button button-primary" href="{{ url_for('main.home') }}">返回首页</a></div>{% endblock %}
