@@ -94,6 +94,25 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+        admin_username = os.getenv("ADMIN_USERNAME", "").strip()
+        admin_nickname = os.getenv("ADMIN_NICKNAME", "").strip()
+        admin_password = os.getenv("ADMIN_PASSWORD", "")
+        if any((admin_username, admin_nickname, admin_password)):
+            if not (admin_username and admin_nickname and admin_password):
+                app.logger.warning("管理员初始化未执行：ADMIN_USERNAME、ADMIN_NICKNAME、ADMIN_PASSWORD 必须同时设置。")
+            elif len(admin_username) < 3 or len(admin_username) > 60 or len(admin_nickname) > 50 or len(admin_password) < 8:
+                app.logger.warning("管理员初始化未执行：请检查用户名、昵称长度及密码长度（至少 8 位）。")
+            else:
+                from app.models import User
+                existing_user = User.query.filter_by(username=admin_username).first()
+                if existing_user is None:
+                    admin = User(username=admin_username, nickname=admin_nickname, account_role="admin")
+                    admin.set_password(admin_password)
+                    db.session.add(admin)
+                    db.session.commit()
+                    app.logger.info("已根据环境变量初始化管理员账号：%s", admin_username)
+                elif existing_user.account_role != "admin":
+                    app.logger.warning("管理员初始化未执行：该用户名已被普通用户使用。")
         if Category.query.count() == 0:
             for index, name in enumerate(("数码电子", "家居生活", "服饰箱包", "书籍文具", "运动户外", "其他")):
                 db.session.add(Category(name=name, sort_order=index))
